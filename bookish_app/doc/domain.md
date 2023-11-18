@@ -1,0 +1,2 @@
+### Partial entities
+Partial entities must be used to list and retain certain informations about the entity. It's used to prevent the use of nullable fields and preserve the lists information overload.
