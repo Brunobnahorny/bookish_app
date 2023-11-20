@@ -9,6 +9,7 @@ import '../../../core/adapters/http_client/http_client_adapter.dart';
 class UrlConstansts {
   static const kSearchBookVolume =
       'https://www.googleapis.com/books/v1/volumes/';
+  static const kPingGoogleApi = 'www.googleapis.com';
 }
 
 class ApiResponseMeta {}

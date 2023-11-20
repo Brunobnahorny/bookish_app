@@ -63,5 +63,6 @@ abstract class BookVolumeEntity extends BookVolumePartialEntity {
     required super.isForSale,
     required super.retailPrice,
     required super.currencyCode,
+    required super.downloadStatus,
   });
 }

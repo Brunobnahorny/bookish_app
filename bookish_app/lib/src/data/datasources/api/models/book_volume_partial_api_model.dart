@@ -1,3 +1,4 @@
+import '../../../../domain/entities/book_volume/book_volume_download_status_entity.dart';
 import '../../../../domain/entities/book_volume/book_volume_partial_entity.dart';
 import 'book_volume_link_api_model.dart';
 
@@ -16,6 +17,7 @@ class BookVolumePartialApiModel extends BookVolumePartialEntity {
     required super.isForSale,
     required super.retailPrice,
     required super.currencyCode,
+    required super.downloadStatus,
   });
 
   factory BookVolumePartialApiModel.fromMap(Map<String, dynamic> map) {
@@ -39,6 +41,9 @@ class BookVolumePartialApiModel extends BookVolumePartialEntity {
           ? (map['saleInfo']?['retailPrice']?['amount'] as int).toDouble()
           : map['saleInfo']?['retailPrice']?['amount'] ?? 0.0,
       currencyCode: map['saleInfo']?['retailPrice']?['currencyCode'],
+
+      /// from api download status always starts false
+      downloadStatus: BookVolumeDownloadStatus(downloaded: false),
     );
   }
 }

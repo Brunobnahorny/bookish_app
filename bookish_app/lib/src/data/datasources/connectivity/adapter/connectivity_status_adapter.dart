@@ -1,15 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:async/async.dart';
-import 'package:bookish_app/src/data/datasources/api/book_volume_api.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
-
-typedef InternetAddressLookup = Future<List<InternetAddress>> Function(
-  String, {
-  InternetAddressType type,
-});
 
 class ConnectivityStatusAdapter {
   @visibleForTesting
@@ -25,8 +18,6 @@ class ConnectivityStatusAdapter {
 
   ///Connectivity package singleton
   final Connectivity _connectivity;
-
-  final InternetAddressLookup internetLookup;
 
   ///Use this stream to listen to network changes
   Stream<bool> get stream => Stream.multi(multiStreamOnListenCallback);
@@ -49,10 +40,9 @@ class ConnectivityStatusAdapter {
   }
 
   ConnectivityStatusAdapter(
-    this._connectivity, [
-    this.internetLookup = InternetAddress.lookup,
-  ]) {
-    //sets has connection
+    this._connectivity,
+  ) {
+    //lazily sets has connection
     hasInternetConnection();
   }
 
@@ -69,10 +59,6 @@ class ConnectivityStatusAdapter {
   Future<bool> hasInternetConnection() async {
     bool connectivityResult = _checkConnection(await checkConnectivityStatus());
 
-    if (connectivityResult) {
-      return _internetLookup();
-    }
-
     return connectivityResult;
   }
 
@@ -85,24 +71,5 @@ class ConnectivityStatusAdapter {
         status == ConnectivityResult.wifi;
 
     return hasConnection;
-  }
-
-  Future<bool> _internetLookup() async {
-    try {
-      final result = await (internetLookup(
-        UrlConstansts.kSearchBookVolume
-            .replaceAll(RegExp(r'(\/api|https:\/\/)'), ''),
-        type: InternetAddressType.IPv4,
-      ).timeout(
-        const Duration(seconds: 2),
-      ));
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      }
-    } catch (_) {
-      //DO NOTHING
-    }
-
-    return false;
   }
 }
