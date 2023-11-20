@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 ///{@category Domain}
 ///{@subcategory Entity}
 @immutable
-abstract class QueryParamEntity {
+class QueryParamEntity {
   /// Search field identifier.
   ///
   /// Must be unique by entity.

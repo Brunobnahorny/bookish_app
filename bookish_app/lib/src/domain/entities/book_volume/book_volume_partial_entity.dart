@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-import '../book_category/book_category_entity.dart';
 import 'book_volume_links.dart';
 
 /// Partial book volume description
@@ -27,13 +26,14 @@ abstract class BookVolumePartialEntity {
   /// Could be in the formats \
   /// YYYY \
   /// YYYY-MM-DD
-  final String publishedDate;
+  /// null
+  final String? publishedDate;
 
   /// Total number of pages.
   final int pageCount;
 
   /// Category classification.
-  final List<BookCategory> categories;
+  final List<String> categories;
 
   /// Maturity classification.
   ///
@@ -45,7 +45,7 @@ abstract class BookVolumePartialEntity {
 
   /// Book volume image, download, detail links.
   final BookVolumeLinksEntity links;
-  
+
   /// Is sale in the google books store.
   final String? isForSale;
 
@@ -54,7 +54,6 @@ abstract class BookVolumePartialEntity {
 
   /// Currency which is listed to sale.
   final String? currencyCode;
-
 
   const BookVolumePartialEntity({
     required this.id,

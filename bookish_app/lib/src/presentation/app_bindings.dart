@@ -1,0 +1,5 @@
+class AppBindings {
+  void initDependencies() {
+    
+  }
+}

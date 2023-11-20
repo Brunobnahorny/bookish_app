@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "bookish_app",
+            "cwd": "bookish_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "bookish_app (profile mode)",
+            "cwd": "bookish_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "bookish_app (release mode)",
+            "cwd": "bookish_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
