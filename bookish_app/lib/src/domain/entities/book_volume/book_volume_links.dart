@@ -25,11 +25,11 @@ abstract class BookVolumeLinksEntity {
   final String? pdfDownloadLink;
 
   const BookVolumeLinksEntity({
-    this.previewLink,
-    this.infoLink,
-    this.smallThumbnail,
-    this.thumbnail,
-    this.ePubDownloadLink,
-    this.pdfDownloadLink,
+    required this.previewLink,
+    required this.infoLink,
+    required this.smallThumbnail,
+    required this.thumbnail,
+    required this.ePubDownloadLink,
+    required this.pdfDownloadLink,
   });
 }

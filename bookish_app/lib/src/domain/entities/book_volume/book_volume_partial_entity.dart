@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'book_volume_download_status_entity.dart';
+import 'book_volume_local_properties_entity.dart';
 import 'book_volume_links.dart';
 
 /// Partial book volume description
@@ -57,7 +57,7 @@ abstract class BookVolumePartialEntity {
   final String? currencyCode;
 
   /// mutable download status
-  final BookVolumeDownloadStatus downloadStatus;
+  final BookVolumeLocalProperties localProperties;
 
   const BookVolumePartialEntity({
     required this.id,
@@ -73,6 +73,6 @@ abstract class BookVolumePartialEntity {
     required this.isForSale,
     required this.retailPrice,
     required this.currencyCode,
-    required this.downloadStatus,
+    required this.localProperties,
   });
 }

@@ -5,9 +5,13 @@ import 'package:bookish_app/src/data/datasources/api/models/book_volume_partial_
 import 'package:bookish_app/src/domain/entities/book_volume/book_volume_partial_entity.dart';
 
 import '../../../core/adapters/http_client/http_client_adapter.dart';
+import '../../../domain/entities/book_volume/book_volume_entity.dart';
+import 'models/book_volume_api_model.dart';
 
 class UrlConstansts {
   static const kSearchBookVolume =
+      'https://www.googleapis.com/books/v1/volumes/';
+  static const kGetBookVolumeDetail =
       'https://www.googleapis.com/books/v1/volumes/';
   static const kPingGoogleApi = 'www.googleapis.com';
 }
@@ -19,7 +23,10 @@ typedef ApiResponseData<T> = (
   T? data,
   ApiResponseMeta? meta,
 );
-typedef BookVolumeResponseData = ApiResponseData<List<BookVolumePartialEntity>>;
+
+typedef BookVolumeListResponseData
+    = ApiResponseData<List<BookVolumePartialEntity>>;
+typedef BookVolumeResponseData = ApiResponseData<BookVolumeEntity?>;
 
 class BookVolumeApi {
   final IHttpClientAdapter httpClient;
@@ -28,7 +35,7 @@ class BookVolumeApi {
     required this.httpClient,
   });
 
-  Future<BookVolumeResponseData> searchList(
+  Future<BookVolumeListResponseData> searchList(
     Map<String, String>? queryParams,
   ) async {
     try {
@@ -41,6 +48,30 @@ class BookVolumeApi {
       final result = (
         null,
         await _mapBookVolumeList(response.data),
+        _mapBookVolumeMeta(response.data),
+      );
+
+      return result;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<BookVolumeResponseData> getBookVolumeDetail(
+    String bookVolumeIdentifier,
+  ) async {
+    try {
+      const path = UrlConstansts.kGetBookVolumeDetail;
+      final HttpClientResponse response = await httpClient.get(
+        path + bookVolumeIdentifier,
+      );
+
+      final result = (
+        null,
+        response.data != null
+            ? BookVolumeApiModel.fromMap(response.data!)
+            : null,
         _mapBookVolumeMeta(response.data),
       );
 

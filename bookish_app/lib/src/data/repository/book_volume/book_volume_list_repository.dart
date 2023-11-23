@@ -4,13 +4,17 @@ import 'package:bookish_app/src/domain/entities/book_volume/book_volume_partial_
 import 'package:bookish_app/src/domain/entities/query_param/query_param_entity.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../datasources/db/book_volume_db.dart';
+
 @immutable
-class BookSearchRepository {
+class BookVolumeListRepository {
   final BookVolumeApi bookVolumeApi;
+  final BookVolumeDB bookVolumeDB;
   final ConnectivityStatusAdapter connectivityStatus;
 
-  const BookSearchRepository({
+  const BookVolumeListRepository({
     required this.bookVolumeApi,
+    required this.bookVolumeDB,
     required this.connectivityStatus,
   });
 
@@ -48,12 +52,23 @@ class BookSearchRepository {
   Future<List<BookVolumePartialEntity>> _searchFromDb({
     required List<QueryParamEntity> searchParams,
   }) async {
-    throw UnimplementedError();
+    final (error, list, _) = await bookVolumeDB.searchList(
+      searchParams,
+      null,
+    );
+
+    if (error != null) {
+      throw ErrorDescription("searchList couldn't get from db");
+    }
+
+    return list ?? <BookVolumePartialEntity>[];
   }
 
   Future<List<BookVolumePartialEntity>> setApiResultDependencies(
     List<BookVolumePartialEntity> apiBookVolume,
   ) async {
-    return apiBookVolume;
+    final result = bookVolumeDB.setApiResultDependencies(apiBookVolume);
+
+    return result;
   }
 }

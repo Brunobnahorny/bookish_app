@@ -3,12 +3,12 @@ import 'package:bookish_app/src/domain/entities/book_volume/book_volume_links.da
 
 class BookVolumeLinkApiModel extends BookVolumeLinksEntity {
   const BookVolumeLinkApiModel({
-    super.previewLink,
-    super.infoLink,
-    super.smallThumbnail,
-    super.thumbnail,
-    super.ePubDownloadLink,
-    super.pdfDownloadLink,
+    required super.previewLink,
+    required super.infoLink,
+    required super.smallThumbnail,
+    required super.thumbnail,
+    required super.ePubDownloadLink,
+    required super.pdfDownloadLink,
   });
 
   Map<String, dynamic> toMap() {

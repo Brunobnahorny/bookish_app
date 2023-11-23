@@ -6,6 +6,8 @@ import 'package:bookish_app/src/data/datasources/api/adapter/dio_client.dart';
 import 'package:bookish_app/src/data/datasources/api/book_volume_api.dart';
 import 'package:bookish_app/src/data/datasources/connectivity/adapter/connectivity_status_adapter.dart';
 import 'package:bookish_app/src/data/repository/credential/credential_repository.dart';
+import 'package:bookish_app/src/domain/use_cases/book_download/set_book_to_delete_use_case.dart';
+import 'package:bookish_app/src/domain/use_cases/book_download/set_book_to_download_use_case.dart';
 import 'package:bookish_app/src/domain/use_cases/book_search/search_book_list_use_case.dart';
 import 'package:bookish_app/src/presentation/book_search/book_search_controller.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -13,7 +15,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../data/repository/book_search/book_search_repository.dart';
+import '../../data/datasources/db/adapter/database/drift_app_db.dart';
+import '../../data/datasources/db/adapter/drift_db_adapter.dart';
+import '../../data/datasources/db/book_volume_db.dart';
+import '../../data/datasources/db/mappers/book_volume_db_mapper.dart';
+import '../../data/datasources/db/mappers/query_param_mapper.dart';
+import '../../data/repository/book_volume/book_volume_list_repository.dart';
+import '../../data/repository/book_volume/book_volume_repository.dart';
 import '../adapters/http_client/http_client_adapter.dart';
 
 class DependencyInjectionService {
@@ -69,6 +77,8 @@ class DependencyInjectionService {
     _getIt.registerFactory(
       () => BookSearchController(
         searchBookListUseCase: _getIt(),
+        setBookToDownloadUseCase: _getIt(),
+        setBookToDeleteUseCase: _getIt(),
       ),
     );
   }
@@ -77,6 +87,18 @@ class DependencyInjectionService {
     _getIt.registerFactory(
       () => SearchBookListUseCase(
         repository: _getIt(),
+      ),
+    );
+    _getIt.registerFactory(
+      () => SetBookToDownloadUseCase(
+        bookVolumeListRepository: _getIt(),
+        bookVolumeRepository: _getIt(),
+      ),
+    );
+
+    _getIt.registerFactory(
+      () => SetBookToDeleteUseCase(
+        bookVolumeRepository: _getIt(),
       ),
     );
   }
@@ -111,9 +133,45 @@ class DependencyInjectionService {
       ),
     );
 
+    //db
     _getIt.registerSingleton(
-      BookSearchRepository(
+      AppDatabase(),
+    );
+
+    _getIt.registerSingleton(
+      BookVolumeDBMapper(),
+    );
+
+    _getIt.registerSingleton(
+      QueryParamMapper(),
+    );
+
+    _getIt.registerSingleton(
+      DriftDBAdapter(
+        database: _getIt(),
+      ),
+    );
+
+    _getIt.registerSingleton(
+      BookVolumeDB(
+        database: _getIt(),
+        mapper: _getIt(),
+        queryParamMapper: _getIt(),
+      ),
+    );
+
+    _getIt.registerSingleton(
+      BookVolumeListRepository(
         bookVolumeApi: _getIt(),
+        bookVolumeDB: _getIt(),
+        connectivityStatus: _getIt(),
+      ),
+    );
+
+    _getIt.registerSingleton(
+      BookVolumeRepository(
+        bookVolumeApi: _getIt(),
+        bookVolumeDB: _getIt(),
         connectivityStatus: _getIt(),
       ),
     );

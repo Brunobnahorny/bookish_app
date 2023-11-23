@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bookish_app/src/domain/entities/book_volume/book_volume_partial_entity.dart';
+import 'package:bookish_app/src/presentation/book_search/view_model/book_volume_partial_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:rx_notifier/rx_notifier.dart';
 
@@ -88,11 +88,12 @@ class BookSearchListView extends StatelessWidget {
         return SliverList.builder(
           itemCount: controller.books.length,
           itemBuilder: (context, index) {
-            final book = controller.books[index];
+            final viewModel = controller.books[index];
 
             return BookVolumeCard(
-              book: book,
-              downloadBookCallback: () => controller.downloadBook(book: book),
+              bookVM: viewModel,
+              downloadBookCallback: () =>
+                  controller.downloadBook(book: viewModel),
             );
           },
         );
@@ -102,17 +103,19 @@ class BookSearchListView extends StatelessWidget {
 }
 
 class BookVolumeCard extends StatelessWidget {
-  final BookVolumePartialEntity book;
+  final BookVolumePartialVM bookVM;
   final Function() downloadBookCallback;
 
   const BookVolumeCard({
     super.key,
-    required this.book,
+    required this.bookVM,
     required this.downloadBookCallback,
   });
 
   @override
   Widget build(BuildContext context) {
+    final book = bookVM.entity;
+
     final subtitleWidget = book.subtitle != null
         ? Text(
             book.subtitle!,
@@ -130,10 +133,36 @@ class BookVolumeCard extends StatelessWidget {
       subtitle: subtitleWidget,
       trailing: IconButton(
         onPressed: downloadBookCallback,
-        icon: const Icon(
-          Icons.download,
+        icon: _CardDownloadStatus(
+          downloadStatus: bookVM.downloadStatus,
         ),
       ),
+    );
+  }
+}
+
+class _CardDownloadStatus extends StatelessWidget {
+  final RxNotifier<BookVolumeDownloadStatus> downloadStatus;
+
+  const _CardDownloadStatus({
+    required this.downloadStatus,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RxBuilder(
+      builder: (context) {
+        if (downloadStatus.value == BookVolumeDownloadStatus.downloading) {
+          return const CircularProgressIndicator();
+        }
+
+        final icon = switch (downloadStatus.value) {
+          BookVolumeDownloadStatus.notDownloaded => Icons.download,
+          _ => Icons.download_done,
+        };
+
+        return Icon(icon);
+      },
     );
   }
 }

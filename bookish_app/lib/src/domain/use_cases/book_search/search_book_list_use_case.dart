@@ -1,9 +1,9 @@
-import 'package:bookish_app/src/data/repository/book_search/book_search_repository.dart';
+import 'package:bookish_app/src/data/repository/book_volume/book_volume_list_repository.dart';
 import 'package:bookish_app/src/domain/entities/book_volume/book_volume_partial_entity.dart';
 import 'package:bookish_app/src/domain/entities/query_param/query_param_entity.dart';
 
 class SearchBookListUseCase {
-  final BookSearchRepository repository;
+  final BookVolumeListRepository repository;
 
   SearchBookListUseCase({
     required this.repository,

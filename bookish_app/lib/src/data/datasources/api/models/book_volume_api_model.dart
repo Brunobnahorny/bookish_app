@@ -1,4 +1,4 @@
-import 'package:bookish_app/src/domain/entities/book_volume/book_volume_download_status_entity.dart';
+import 'package:bookish_app/src/domain/entities/book_volume/book_volume_local_properties_entity.dart';
 
 import '../../../../domain/entities/book_volume/book_volume_entity.dart';
 import 'book_volume_link_api_model.dart';
@@ -25,7 +25,7 @@ class BookVolumeApiModel extends BookVolumeEntity {
     required super.country,
     required super.viewability,
     required super.publicDomain,
-    required super.downloadStatus,
+    required super.localProperties,
   });
 
   factory BookVolumeApiModel.fromMap(Map<String, dynamic> map) {
@@ -37,7 +37,9 @@ class BookVolumeApiModel extends BookVolumeEntity {
           map['volumeInfo']?['authors']?.cast<String>().toList() ?? <String>[],
       publishedDate: map['volumeInfo']['publishedDate'] as String,
       pageCount: map['volumeInfo']['pageCount'] as int,
-      categories: map['volumeInfo']['categories'],
+      categories:
+          (map['volumeInfo']['categories'] as List<dynamic>?)?.cast<String>() ??
+              <String>[],
       isMaturityRating: map['volumeInfo']['maturityRating'] == "MATURE",
       language: map['volumeInfo']['language'] as String,
       links: BookVolumeLinkApiModel.fromMap(
@@ -54,8 +56,9 @@ class BookVolumeApiModel extends BookVolumeEntity {
       country: map['saleInfo']['country'],
       viewability: map['accessInfo']['viewability'],
       publicDomain: map['accessInfo']['publicDomain'],
+
       /// from api download status always starts false
-      downloadStatus: BookVolumeDownloadStatus(downloaded: false),
+      localProperties: BookVolumeLocalProperties(downloaded: false),
     );
   }
 }
