@@ -63,7 +63,12 @@ class _SliverSearchBarInputState extends State<SliverSearchBarInput> {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 20),
+        padding: const EdgeInsets.only(
+          left: 64,
+          right: 64,
+          bottom: 20,
+          top: 42,
+        ),
         child: SearchBar(
           controller: widget.controller.searchInputTEC,
           onChanged: _searchBarOnChanged,
@@ -124,7 +129,17 @@ class BookVolumeCard extends StatelessWidget {
         : null;
 
     final leadingWidget = book.links.smallThumbnail != null
-        ? Image.network(book.links.smallThumbnail!)
+        ? Image.network(
+            book.links.smallThumbnail!,
+            errorBuilder: (context, error, stackTrace) {
+              return const CircleAvatar(
+                radius: 32,
+                child: Icon(
+                  Icons.book,
+                ),
+              );
+            },
+          )
         : null;
 
     return ListTile(
