@@ -26,9 +26,8 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => BookSearchPage(
-          controller: dependencyInjectorService.find(),
-        ),
+        builder: (context, state) =>
+            dependencyInjectorService.find<BookSearchPage>(),
       ),
     ],
   );

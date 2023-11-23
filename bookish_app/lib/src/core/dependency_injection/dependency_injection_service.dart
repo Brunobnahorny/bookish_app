@@ -22,6 +22,7 @@ import '../../data/datasources/db/mappers/book_volume_db_mapper.dart';
 import '../../data/datasources/db/mappers/query_param_mapper.dart';
 import '../../data/repository/book_volume/book_volume_list_repository.dart';
 import '../../data/repository/book_volume/book_volume_repository.dart';
+import '../../presentation/book_search/book_search_page.dart';
 import '../adapters/http_client/http_client_adapter.dart';
 
 class DependencyInjectionService {
@@ -79,6 +80,12 @@ class DependencyInjectionService {
         searchBookListUseCase: _getIt(),
         setBookToDownloadUseCase: _getIt(),
         setBookToDeleteUseCase: _getIt(),
+      ),
+    );
+
+    _getIt.registerLazySingleton(
+      () => BookSearchPage(
+        controller: _getIt(),
       ),
     );
   }
